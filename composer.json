@@ -1,0 +1,34 @@
+{
+    "name": "andydune/datetime",
+    "description": "Extends DateTime class for add some comfort.",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "datetime"
+    ],
+    "authors": [
+        {
+            "name": "Andrey Ryzhov",
+            "email": "info@rznw.ru"
+        }
+    ],
+    "homepage": "https://github.com/AndyDune/DateTime",
+    "autoload": {
+        "psr-4": {
+            "AndyDune\\DateTime\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7.15 || ^6.0.8"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload-dev": {
+        "psr-4": {
+            "AndyDuneTest\\DateTime\\": "test/"
+        }
+    }
+}
