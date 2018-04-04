@@ -60,6 +60,14 @@ class DateTimeTest extends TestCase
         $dt->add('-2 days');
         $this->assertEquals($dt->getTimestamp(), $ts1 - 2 * 24 * 3600);
 
+        $dt = new DateTime();
+        $dt->add('-7 days');
+        $mondayDate = $dt->getDateMonday();
+        $sundayDate = $dt->getDateSunday();
+        $interval = (strtotime($sundayDate) - strtotime($mondayDate)) / (3600 * 24);
+        $this->assertEquals(6, $interval);
+
+
     }
 
 }

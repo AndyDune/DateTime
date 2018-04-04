@@ -109,6 +109,54 @@ class DateTime
 
 
     /**
+     * Returns monday date.
+     *
+     * @param string $format
+     * @return false|string
+     */
+    public function getDateMonday($format = 'Y-m-d')
+    {
+        $weekDay = $this->format('N') - 1;
+        $time = $this->getTimestamp();
+        if ($weekDay) {
+            $time -= $weekDay * 24 * 3600;
+        }
+        return date($format, $time);
+    }
+
+
+    /**
+     * Returns sunday date.
+     *
+     * @param string $format
+     * @return false|string
+     */
+    public function getDateSunday($format = 'Y-m-d')
+    {
+        $weekDay = 7 - $this->format('N');
+        $time = $this->getTimestamp();
+        if ($weekDay) {
+            $time += $weekDay * 24 * 3600;
+        }
+        return date($format, $time);
+    }
+
+    public function getDay()
+    {
+        return $this->format('j');
+    }
+
+    public function getMonth()
+    {
+        return $this->format('n');
+    }
+
+    public function getYear()
+    {
+        return $this->format('Y');
+    }
+
+    /**
      * Returns Unix timestamp from date.
      *
      * @return int
