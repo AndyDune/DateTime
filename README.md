@@ -7,3 +7,27 @@
 
 
 Extends DateTime class for add some comfort.
+
+Installation
+------------
+
+Installation using composer:
+
+```
+composer require andydune/datetime
+```
+Or if composer didn't install globally:
+```
+php composer.phar require andydune/datetime
+```
+Or edit your `composer.json`:
+```
+"require" : {
+     "andydune/datetime": "^1"
+}
+
+```
+And execute command:
+```
+php composer.phar update
+```
