@@ -31,6 +31,11 @@ class DateTime
      */
     public function __construct($time = null, $format = null, \DateTimeZone $timezone = null)
     {
+        if ($time instanceof \DateTime) {
+            $this->value = $time;
+            return;
+        }
+
         if ($time !== null && $time !== "")
         {
             if ($format === null)

@@ -68,6 +68,13 @@ class DateTimeTest extends TestCase
         $this->assertEquals(6, $interval);
 
 
+
+        $origin = new \DateTime();
+        $origin->add(new \DateInterval('PT1H'));
+        $time = time();
+        $dt = new DateTime($origin);
+        $this->assertEquals($dt->getTimestamp(), $time + 1 * 3600);
+
     }
 
 }
