@@ -37,28 +37,28 @@ How to create instance
 
 Constructor without parameters set current time value.
 ```php
-namespace AndyDuneTest\DateTime;
+use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime();
 $dt->getTimestamp; // == time()
 ``` 
 
 Constructor with integer parameter is unit seconds.
 ```php
-namespace AndyDuneTest\DateTime;
+use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime(time() + 3600);
 $dt->getTimestamp; // == time() + 3600
 ``` 
 
 Constructor with string parameter is the same for function `strtotime()`
 ```php
-namespace AndyDuneTest\DateTime;
+use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime('2018-04-11'); // default format is mysql datetime
 $dt = new DateTime('11.04.2017', 'd.m.Y'); // own format - use string as for date() function
 ``` 
 
 Constructor with parameter `\Datetime` type
 ```php
-namespace AndyDuneTest\DateTime;
+use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime(new \DateTime());
 ``` 
 
@@ -80,7 +80,7 @@ Period Designators:
 Examples: 
 
 ```php
-namespace AndyDuneTest\DateTime;
+use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime();
 $dt->add('2D'); // two days
 $dt->add('T2S'); // two seconds
@@ -94,7 +94,7 @@ Use first "-" char for negative periods. OR Relative period.
 Examples:
 
 ```php
-namespace AndyDuneTest\DateTime;
+use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime();
 $dt->add('+5 weeks'); // 5 weeks to future
 $dt->add('12 day'); // 12 days to future
