@@ -52,7 +52,8 @@ $dt->getTimestamp; // == time() + 3600
 Constructor with string parameter is the same for function `strtotime()`
 ```php
 namespace AndyDuneTest\DateTime;
-$dt = new DateTime('Y-m-d');
+$dt = new DateTime('2018-04-11'); // default format is mysql datetime
+$dt = new DateTime('11.04.2017', 'd.m.Y'); // own format - use string as for date() function
 ``` 
 
 Constructor with parameter `\Datetime` type
