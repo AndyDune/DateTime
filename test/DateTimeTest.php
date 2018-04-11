@@ -67,6 +67,17 @@ class DateTimeTest extends TestCase
         $interval = (strtotime($sundayDate) - strtotime($mondayDate)) / (3600 * 24);
         $this->assertEquals(6, $interval);
 
+        $dt = new DateTime($time);
+        $dt->add('-3 weekdays');
+        $formated = $dt->format('Y-m-d H:i:s');
+        $this->assertTrue((bool)$formated);
+
+        $dt = new DateTime($time);
+        $dt->add('3 months - 5 days');
+        $formated = $dt->format('Y-m-d H:i:s');
+        $this->assertTrue((bool)$formated);
+
+
 
 
         $origin = new \DateTime();
