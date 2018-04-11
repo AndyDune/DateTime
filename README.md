@@ -91,7 +91,7 @@ $dt->add('6YT5M'); // six years and five minutes
 The unit types must be entered from the largest scale unit on the left to the smallest scale unit on the right.
 Use first "-" char for negative periods. OR Relative period.
 
-Examples: "+5 weeks", "12 day", "-7 weekdays", '3 months - 5 days'
+Examples:
 
 ```php
 namespace AndyDuneTest\DateTime;
