@@ -12,10 +12,15 @@
 
 
 namespace AndyDune\DateTime;
-
+use DateTimeZone;
 
 class DateTime
 {
+
+    /**
+     * @var null|DateTimeZone
+     */
+    protected $datetimeZone = null;
 
     protected $defaultFormat = 'Y-m-d H:i:s';
 
@@ -26,11 +31,14 @@ class DateTime
     /**
      * @param string $time String representation of datetime.
      * @param string $format Format accepted by date(). If not specified, the format is Y-m-d H:i:s.
-     * @param \DateTimeZone $timezone Optional timezone object.
+     * @param \DateTimeZone|string $timezone Optional timezone object.
      *
      */
-    public function __construct($time = null, $format = null, \DateTimeZone $timezone = null)
+    public function __construct($time = null, $format = null,  $timezone = null)
     {
+        if ($timezone and is_string($timezone)) {
+            $timezone = new DateTimeZone($timezone);
+        }
         if ($time instanceof \DateTime) {
             $this->value = $time;
             return;
@@ -48,10 +56,40 @@ class DateTime
 
             $this->value = \DateTime::createFromFormat($format, $time, $timezone);
         } else {
-            $this->value = new \DateTime(null, $timezone);
+             $this->value= new \DateTime(null, $timezone);
         }
+        $this->datetimeZone = $this->value->getTimezone();
     }
 
+    /**
+     * Set current timezone.
+     * It can be string:
+     * Europe/Moscow
+     * Asia/Novosibirsk
+     * Asia/Vladivostok
+     *
+     * and other from http://php.net/manual/en/timezones.php
+     *
+     * @param DateTimeZone|string  $zone
+     * @return $this
+     */
+    public function setDateTimeZone($zone)
+    {
+        if (is_string($zone)) {
+            $zone = new DateTimeZone($zone);
+        }
+        $this->value->setTimezone($zone);
+        return $this;
+    }
+
+
+    /**
+     * @return DateTimeZone
+     */
+    public function getTimezone()
+    {
+        return $this->value->getTimezone();
+    }
 
     /**
      * Performs dates arithmetic.
@@ -146,16 +184,31 @@ class DateTime
         return date($format, $time);
     }
 
+    /**
+     * Day of the month without leading zeros
+     *
+     * @return string
+     */
     public function getDay()
     {
         return $this->format('j');
     }
 
+    /**
+     * Numeric representation of a month, without leading zeros
+     *
+     * @return string
+     */
     public function getMonth()
     {
         return $this->format('n');
     }
 
+    /**
+     * A full numeric representation of a year, 4 digits
+     *
+     * @return string
+     */
     public function getYear()
     {
         return $this->format('Y');

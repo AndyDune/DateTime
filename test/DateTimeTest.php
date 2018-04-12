@@ -77,14 +77,22 @@ class DateTimeTest extends TestCase
         $formated = $dt->format('Y-m-d H:i:s');
         $this->assertTrue((bool)$formated);
 
-
-
-
         $origin = new \DateTime();
         $origin->add(new \DateInterval('PT1H'));
         $time = time();
         $dt = new DateTime($origin);
         $this->assertEquals($dt->getTimestamp(), $time + 1 * 3600);
+
+    }
+
+    public function testTimeZone()
+    {
+        $time = time() + 3 * 3600;
+        $tt = date('Y-m-d H:i:s', $time);
+
+        $dt = new DateTime($time, null, 'Europe/Moscow');
+
+        $this->assertEquals($tt, $dt->format('Y-m-d H:i:s'));
 
     }
 
