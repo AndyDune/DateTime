@@ -62,6 +62,18 @@ use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime(new \DateTime());
 ``` 
 
+Format datetime
+------------
+
+It has method `format()` to get formated datetiem data as string. Method waits string as for date() function.
+```php
+use AndyDuneTest\DateTime\DateTime;
+$dt = new DateTime();
+echo $dt->format('Y-m-d'); // 2107-04-12
+echo $dt->format('H:i'); // 10:04
+```
+
+
 Dates arithmetic.
 ------------
 
