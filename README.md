@@ -114,3 +114,54 @@ $dt->add('-7 weekdays'); // 7 working daye to past
 $dt->add('3 months - 5 days'); // 3 months to future and 5 days to past
 ``` 
 
+
+Tools
+------------
+
+### Bring per day statistics to weeks.
+
+If there is no full weekdays number is source data missing days will be added as average.  
+
+Source json:
+
+```php
+$json = '
+   {
+    "2018-03-01" : 913,
+    "2018-03-03" : 913,
+    "2018-03-04" : 913,
+    
+    "2018-03-05" : 910,
+    "2018-03-07" : 914,
+    "2018-03-08" : 915,
+    "2018-03-09" : 915,
+    "2018-03-11" : 912,
+    
+    "2018-03-12" : 869,
+    "2018-03-14" : 869,
+    "2018-03-16" : 869,
+    "2018-03-17" : 864,
+}';
+
+```
+
+```php
+use AndyDune\DateTime\Tool\Statistics\BringNumberInDayToNumberInWeek;
+$data = json_decode($json, true);
+
+$stat = new BringNumberInDayToNumberInWeek($data);
+$weeks = $stat->getWeeksWithCalendarDivision();
+
+```
+
+Weeks are:
+
+```json
+ {
+    "2018-03-04" : 6391,
+    "2018-03-11" : 6393,
+    "2018-03-18" : 6075
+}
+```
+
+
