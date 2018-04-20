@@ -23,7 +23,7 @@ php composer.phar require andydune/datetime
 Or edit your `composer.json`:
 ```
 "require" : {
-     "andydune/datetime": "^1"
+     "andydune/datetime": "^2"
 }
 
 ```
