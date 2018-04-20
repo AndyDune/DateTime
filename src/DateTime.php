@@ -13,9 +13,15 @@
 
 namespace AndyDune\DateTime;
 use DateTimeZone;
+use AndyDune\DateTime\Action\AbstractAction;
 
 class DateTime
 {
+
+    /**
+     * @var null|AbstractAction
+     */
+    protected $action = null;
 
     /**
      * @var null|DateTimeZone
@@ -59,6 +65,29 @@ class DateTime
              $this->value= new \DateTime(null, $timezone);
         }
         $this->datetimeZone = $this->value->getTimezone();
+    }
+
+    /**
+     * Set strategy pattern action for modification array.
+     * Action callable object resieves whole array in container and return array ro replace.
+     *
+     * @param AbstractAction $action
+     * @return $this
+     */
+    public function setAction(AbstractAction $action)
+    {
+        $this->action = $action;
+        $this->action->setDateTime($this);
+        return $this;
+    }
+
+    /**
+     * @param array ...$params
+     * @return mixed
+     */
+    public function executeAction(...$params)
+    {
+        return $this->action->execute(...$params);
     }
 
     /**
@@ -155,20 +184,25 @@ class DateTime
      * Returns monday date.
      *
      * @param string $format
-     * @return false|string
+     * @return string|DateTime returns DateTime if empty param $format
      */
     public function getDateMonday($format = 'Y-m-d')
     {
         $weekDay = $this->format('N') - 1;
-        $time = $this->getTimestamp();
+        $dateTime = clone $this;
         if ($weekDay) {
-            $time -= $weekDay * 24 * 3600;
+            $dateTime->add(sprintf('- %d days', $weekDay));
         }
-        return date($format, $time);
+        if ($format) {
+            return $dateTime->format($format);
+        }
+        return $dateTime;
     }
 
 
     /**
+     * @todo refactor as getDateMonday
+     *
      * Returns sunday date.
      *
      * @param string $format
@@ -182,6 +216,16 @@ class DateTime
             $time += $weekDay * 24 * 3600;
         }
         return date($format, $time);
+    }
+
+    public function isSunday()
+    {
+        return ($this->format('N') == 7);
+    }
+
+    public function isSaturday()
+    {
+        return ($this->format('N') == 6);
     }
 
     /**
