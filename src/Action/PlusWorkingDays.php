@@ -19,7 +19,11 @@ class PlusWorkingDays extends AbstractAction
     protected $noWorkingDays = [];
     protected $format = 'j-m';
 
+    protected $workingDays = [];
+
     protected $plusNoWorkingDayIfItHappenInSaturdayOrSunday = false;
+
+    protected $addWorkingDayIfPublicHolidayInCommonHoliday = true;
 
     /**
      * Set official no working days for your country.
@@ -38,6 +42,22 @@ class PlusWorkingDays extends AbstractAction
         return $this;
     }
 
+    public function setWorkingDays(array $days, $format = null)
+    {
+        $this->workingDays = $days;
+        if ($format) {
+            $this->format = $format;
+        }
+        return $this;
+    }
+
+    protected function setIsAddWorkingDayIfPublicHolidayInCommonHoliday($flag = true)
+    {
+        $this->addWorkingDayIfPublicHolidayInCommonHoliday = $flag;
+        return $this;
+    }
+
+
     public function execute(...$params)
     {
         $plusDays = $params[0] ?? 0;
@@ -45,10 +65,19 @@ class PlusWorkingDays extends AbstractAction
         do {
             $go = $plusDays;
             $inNoWorkingDays = $this->isInNoWorkingDays();
+            if ($this->isInWorkingDays()) {
+                if (!$plusDays) {
+                    return $this->getDateTime();
+                }
+                $this->getDateTime()->add('+ 1 day');
+                $plusDays--;
+                continue;
+            }
             if ($this->getDateTime()->isSaturday()
                 or $this->getDateTime()->isSunday()
             ) {
-                if ($inNoWorkingDays and $doNotFindHolidayInSunday > 4) {
+                if ($this->addWorkingDayIfPublicHolidayInCommonHoliday
+                    and $inNoWorkingDays and $doNotFindHolidayInSunday > 4) {
                     $doNotFindHolidayInSunday = 0;
                     $plusDays++;
                 }
@@ -82,4 +111,14 @@ class PlusWorkingDays extends AbstractAction
         }
         return false;
     }
+
+    protected function isInWorkingDays()
+    {
+        $dayMonth = $this->getDateTime()->format($this->format);
+        if (in_array($dayMonth, $this->workingDays)) {
+            return true;
+        }
+        return false;
+    }
+
 }
