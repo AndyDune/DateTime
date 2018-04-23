@@ -16,42 +16,14 @@ namespace AndyDune\DateTime\Action;
 
 class PlusWorkingDays extends AbstractAction
 {
-    protected $noWorkingDays = [];
-    protected $format = 'j-m';
-
-    protected $workingDays = [];
+    use WorkingDaysTrait;
 
     protected $plusNoWorkingDayIfItHappenInSaturdayOrSunday = false;
 
-    protected $addWorkingDayIfPublicHolidayInCommonHoliday = true;
+    protected $addWorkingDayIfPublicHolidayInCommonHoliday = false;
 
-    /**
-     * Set official no working days for your country.
-     *
-     * Format:
-     * ['d-m', 'd-m', ...]
-     *
-     * @param $days
-     * @param $format
-     * @return $this
-     */
-    public function setNoWorkingDays(array $days, $format = 'j-m')
-    {
-        $this->noWorkingDays = $days;
-        $this->format = $format;
-        return $this;
-    }
 
-    public function setWorkingDays(array $days, $format = null)
-    {
-        $this->workingDays = $days;
-        if ($format) {
-            $this->format = $format;
-        }
-        return $this;
-    }
-
-    protected function setIsAddWorkingDayIfPublicHolidayInCommonHoliday($flag = true)
+    public function setIsAddWorkingDayIfPublicHolidayInCommonHoliday($flag = true)
     {
         $this->addWorkingDayIfPublicHolidayInCommonHoliday = $flag;
         return $this;
@@ -101,24 +73,6 @@ class PlusWorkingDays extends AbstractAction
             $go = $plusDays--;
         } while ($go);
         return $this->getDateTime();
-    }
-
-    protected function isInNoWorkingDays()
-    {
-        $dayMonth = $this->getDateTime()->format($this->format);
-        if (in_array($dayMonth, $this->noWorkingDays)) {
-            return true;
-        }
-        return false;
-    }
-
-    protected function isInWorkingDays()
-    {
-        $dayMonth = $this->getDateTime()->format($this->format);
-        if (in_array($dayMonth, $this->workingDays)) {
-            return true;
-        }
-        return false;
     }
 
 }

@@ -69,11 +69,20 @@ class PlusWorkingDaysTest extends TestCase
         $action = new PlusWorkingDays();
         $action->setNoWorkingDays(['28-04']);
         $result = $dt->setAction($action)->executeAction(8)->format('d-m-Y');
+        $this->assertEquals('02-05-2018', $result);
+
+        $dt = new DateTime('20-04-2018', 'd-m-Y');
+        $action = new PlusWorkingDays();
+        $action->setIsAddWorkingDayIfPublicHolidayInCommonHoliday(true);
+        $action->setNoWorkingDays(['28-04']);
+        $result = $dt->setAction($action)->executeAction(8)->format('d-m-Y');
         $this->assertEquals('03-05-2018', $result);
+
 
 
         $dt = new DateTime('20-04-2018', 'd-m-Y');
         $action = new PlusWorkingDays();
+        $action->setIsAddWorkingDayIfPublicHolidayInCommonHoliday();
         $action->setNoWorkingDays(['28-04', '29-04']);
         $result = $dt->setAction($action)->executeAction(8)->format('d-m-Y');
         $this->assertEquals('03-05-2018', $result);
@@ -116,5 +125,23 @@ class PlusWorkingDaysTest extends TestCase
         $action = new IsWorkingDay();
         $action->setNoWorkingDays(['20-04', '29-04']);
         $this->assertFalse($dt->setAction($action)->executeAction());
+
+
+        $dt = new DateTime('28-04-2018', 'd-m-Y');
+        $action = new IsWorkingDay();
+        $this->assertFalse($dt->setAction($action)->executeAction());
+
+        $action = new IsWorkingDay();
+        $action->setNoWorkingDays(['1-05']);
+        $action->setWorkingDays(['28-04']);
+        $this->assertTrue($dt->setAction($action)->executeAction());
+
+        $dt = new DateTime('01-05-2018', 'd-m-Y');
+        $action = new IsWorkingDay();
+        $action->setNoWorkingDays(['1-05']);
+        $action->setWorkingDays(['28-04']);
+        $this->assertFalse($dt->setAction($action)->executeAction());
+
+
     }
 }

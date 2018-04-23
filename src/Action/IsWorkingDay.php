@@ -16,30 +16,13 @@ namespace AndyDune\DateTime\Action;
 
 class IsWorkingDay extends AbstractAction
 {
-    protected $noWorkingDays = [];
-    protected $format = 'j-m';
-
-    protected $plusNoWorkingDayIfItHappenInSaturdayOrSunday = false;
-
-    /**
-     * Set official no working days for your country.
-     *
-     * Format:
-     * ['d-m', 'd-m', ...]
-     *
-     * @param $days
-     * @param $format
-     * @return $this
-     */
-    public function setNoWorkingDays(array $days, $format = 'j-m')
-    {
-        $this->noWorkingDays = $days;
-        $this->format = $format;
-        return $this;
-    }
+    use WorkingDaysTrait;
 
     public function execute(...$params)
     {
+        if ($this->isInWorkingDays()) {
+            return true;
+        }
 
         if ($this->getDateTime()->isSaturday()
             or $this->getDateTime()->isSaturday()
@@ -50,12 +33,4 @@ class IsWorkingDay extends AbstractAction
         return true;
     }
 
-    protected function isInNoWorkingDays()
-    {
-        $dayMonth = $this->getDateTime()->format($this->format);
-        if (in_array($dayMonth, $this->noWorkingDays)) {
-            return true;
-        }
-        return false;
-    }
 }
