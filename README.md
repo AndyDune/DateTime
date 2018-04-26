@@ -164,4 +164,29 @@ Weeks are:
 }
 ```
 
+Strategy pattent
+------------
+There is great instrument to manipulatin with `DateTime` object without editting existing code in this library.
+
+## Methods
+
+`DateTime::setAction(AbstractAction $action)` - add action for further execution
+
+`DateTime::executeAction(...$params)` - execute actions with any patrams
+
+
+### To know is working day
+
+```php
+use AndyDune\DateTime\Action\IsWorkingDay;
+use AndyDune\DateTime\DateTime;
+
+$dt = new DateTime('18-04-2018', 'd-m-Y');
+$dt->setAction(new IsWorkingDay())->executeAction(); // true
+
+$dt = new DateTime('22-04-2018', 'd-m-Y');
+$dt->setAction(new IsWorkingDay())->executeAction(); // false
+
+```
+
 
