@@ -142,35 +142,29 @@ class DateTime
      */
     public function add($interval)
     {
+        // @todo do it better
         $i = null;
-        try
-        {
+        try {
             $intervalTmp = strtoupper($interval);
             $isNegative = false;
             $firstChar = substr($intervalTmp, 0, 1);
-            if ($firstChar === "-")
-            {
+            if ($firstChar === "-") {
                 $isNegative = true;
                 $intervalTmp = substr($intervalTmp, 1);
                 $firstChar = substr($intervalTmp, 0, 1);
             }
 
-            if ($firstChar !== "P")
-            {
+            if ($firstChar !== "P") {
                 $intervalTmp = "P".$intervalTmp;
             }
             $i = new \DateInterval($intervalTmp);
-            if ($isNegative)
-            {
+            if ($isNegative) {
                 $i->invert = 1;
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
         }
 
-        if ($i == null)
-        {
+        if ($i == null) {
             $i = \DateInterval::createFromDateString($interval);
         }
 
@@ -314,5 +308,10 @@ class DateTime
     {
         $this->value->setTimestamp($timestamp);
         return $this;
+    }
+
+    public function __clone()
+    {
+        $this->value = clone $this->value;
     }
 }
