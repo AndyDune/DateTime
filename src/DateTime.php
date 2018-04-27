@@ -12,6 +12,7 @@
 
 
 namespace AndyDune\DateTime;
+
 use DateTimeZone;
 use AndyDune\DateTime\Action\AbstractAction;
 
@@ -34,13 +35,14 @@ class DateTime
      * @var \DateTime
      */
     protected $value;
+
     /**
      * @param string $time String representation of datetime.
      * @param string $format Format accepted by date(). If not specified, the format is Y-m-d H:i:s.
      * @param \DateTimeZone|string $timezone Optional timezone object.
      *
      */
-    public function __construct($time = null, $format = null,  $timezone = null)
+    public function __construct($time = null, $format = null, $timezone = null)
     {
         if ($timezone and is_string($timezone)) {
             $timezone = new DateTimeZone($timezone);
@@ -50,10 +52,8 @@ class DateTime
             return;
         }
 
-        if ($time !== null && $time !== "")
-        {
-            if ($format === null)
-            {
+        if ($time !== null && $time !== "") {
+            if ($format === null) {
                 $format = $this->defaultFormat;
                 if (is_integer($time)) {
                     $time = date($format, $time);
@@ -62,7 +62,7 @@ class DateTime
 
             $this->value = \DateTime::createFromFormat($format, $time, $timezone);
         } else {
-             $this->value= new \DateTime(null, $timezone);
+            $this->value = new \DateTime(null, $timezone);
         }
         $this->datetimeZone = $this->value->getTimezone();
     }
@@ -99,7 +99,7 @@ class DateTime
      *
      * and other from http://php.net/manual/en/timezones.php
      *
-     * @param DateTimeZone|string  $zone
+     * @param DateTimeZone|string $zone
      * @return $this
      */
     public function setDateTimeZone($zone)
@@ -142,7 +142,24 @@ class DateTime
      */
     public function add($interval)
     {
-        // @todo do it better
+        $i = $this->tryToCreateIntervalByDesignators($interval);
+        if ($i == null)
+        {
+            $i = \DateInterval::createFromDateString($interval);
+        }
+
+        $this->value->add($i);
+
+        return $this;
+    }
+
+
+    private function tryToCreateIntervalByDesignators($interval)
+    {
+        if (!is_string($interval) || strpos($interval, ' ') !== false) {
+            return null;
+        }
+
         $i = null;
         try {
             $intervalTmp = strtoupper($interval);
@@ -155,7 +172,7 @@ class DateTime
             }
 
             if ($firstChar !== "P") {
-                $intervalTmp = "P".$intervalTmp;
+                $intervalTmp = "P" . $intervalTmp;
             }
             $i = new \DateInterval($intervalTmp);
             if ($isNegative) {
@@ -164,15 +181,8 @@ class DateTime
         } catch (\Exception $e) {
         }
 
-        if ($i == null) {
-            $i = \DateInterval::createFromDateString($interval);
-        }
-
-        $this->value->add($i);
-
-        return $this;
+        return $i;
     }
-
 
     /**
      * Returns monday date.
