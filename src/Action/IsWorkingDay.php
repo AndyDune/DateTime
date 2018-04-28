@@ -25,7 +25,7 @@ class IsWorkingDay extends AbstractAction
         }
 
         if ($this->getDateTime()->isSaturday()
-            or $this->getDateTime()->isSaturday()
+            or $this->getDateTime()->isSunday()
             or $this->isInNoWorkingDays()
         ) {
             return false;

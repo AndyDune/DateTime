@@ -14,6 +14,7 @@
 namespace AndyDune\DateTime;
 
 use DateTimeZone;
+use DateInterval;
 use AndyDune\DateTime\Action\AbstractAction;
 
 class DateTime
@@ -123,6 +124,8 @@ class DateTime
     /**
      * Performs dates arithmetic.
      *
+     * http://php.net/manual/en/datetime.formats.relative.php
+     *
      * Each duration period is represented by an integer value followed by a period
      * designator. If the duration contains time elements, that portion of the
      * specification is preceded by the letter T.
@@ -136,16 +139,20 @@ class DateTime
      * Relative period.
      * Examples: "+5 weeks", "12 day", "-7 weekdays", '3 months - 5 days'
      *
-     * @param string $interval Time interval to add.
+     * @param string|DateInterval $interval Time interval to add.
      *
      * @return DateTime
      */
     public function add($interval)
     {
+        if ($interval instanceof DateInterval) {
+            $this->value->add($interval);
+            return $this;
+        }
+
         $i = $this->tryToCreateIntervalByDesignators($interval);
-        if ($i == null)
-        {
-            $i = \DateInterval::createFromDateString($interval);
+        if (!$i) {
+            $i = DateInterval::createFromDateString($interval);
         }
 
         $this->value->add($i);
@@ -157,10 +164,9 @@ class DateTime
     private function tryToCreateIntervalByDesignators($interval)
     {
         if (!is_string($interval) || strpos($interval, ' ') !== false) {
-            return null;
+            return false;
         }
 
-        $i = null;
         try {
             $intervalTmp = strtoupper($interval);
             $isNegative = false;
@@ -179,6 +185,7 @@ class DateTime
                 $i->invert = 1;
             }
         } catch (\Exception $e) {
+            return false;
         }
 
         return $i;
