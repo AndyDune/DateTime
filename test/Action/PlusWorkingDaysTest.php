@@ -24,15 +24,21 @@ class PlusWorkingDaysTest extends TestCase
     {
 
         $dt = new DateTime('18-04-2018', 'd-m-Y');
-        $result = $dt->setAction(new PlusWorkingDays())->executeAction()->format('d-m-Y');
+        $action = new PlusWorkingDays();
+        $result = $dt->setAction($action)->executeAction()->format('d-m-Y');
+        $this->assertEquals(0, $action->getDaysPlus());
         $this->assertEquals('18-04-2018', $result);
 
         $dt = new DateTime('18-04-2018', 'd-m-Y');
-        $result = $dt->setAction(new PlusWorkingDays())->executeAction(1)->format('d-m-Y');
+        $action = new PlusWorkingDays();
+        $result = $dt->setAction($action)->executeAction(1)->format('d-m-Y');
+        $this->assertEquals(1, $action->getDaysPlus());
         $this->assertEquals('19-04-2018', $result);
 
         $dt = new DateTime('18-04-2018', 'd-m-Y');
-        $result = $dt->setAction(new PlusWorkingDays())->executeAction(2)->format('d-m-Y');
+        $action = new PlusWorkingDays();
+        $result = $dt->setAction($action)->executeAction(2)->format('d-m-Y');
+        $this->assertEquals(2, $action->getDaysPlus());
         $this->assertEquals('20-04-2018', $result);
 
         $dt = new DateTime('18-04-2018', 'd-m-Y');
@@ -70,6 +76,7 @@ class PlusWorkingDaysTest extends TestCase
         $action->setNoWorkingDays(['28-04']);
         $result = $dt->setAction($action)->executeAction(8)->format('d-m-Y');
         $this->assertEquals('02-05-2018', $result);
+        $this->assertEquals(12, $action->getDaysPlus());
 
         $dt = new DateTime('20-04-2018', 'd-m-Y');
         $action = new PlusWorkingDays();
@@ -77,8 +84,7 @@ class PlusWorkingDaysTest extends TestCase
         $action->setNoWorkingDays(['28-04']);
         $result = $dt->setAction($action)->executeAction(8)->format('d-m-Y');
         $this->assertEquals('03-05-2018', $result);
-
-
+        $this->assertEquals(13, $action->getDaysPlus());
 
         $dt = new DateTime('20-04-2018', 'd-m-Y');
         $action = new PlusWorkingDays();
@@ -86,6 +92,7 @@ class PlusWorkingDaysTest extends TestCase
         $action->setNoWorkingDays(['28-04', '29-04']);
         $result = $dt->setAction($action)->executeAction(8)->format('d-m-Y');
         $this->assertEquals('03-05-2018', $result);
+        $this->assertEquals(13, $action->getDaysPlus());
     }
 
     public function testWorkingDays()
@@ -96,6 +103,7 @@ class PlusWorkingDaysTest extends TestCase
         $action->setWorkingDays(['28-04']);
         $result = $dt->setAction($action)->executeAction(1)->format('d-m-Y');
         $this->assertEquals('28-04-2018', $result);
+        $this->assertEquals(1, $action->getDaysPlus());
 
         $dt = new DateTime('28-04-2018', 'd-m-Y');
         $action = new PlusWorkingDays();
@@ -103,6 +111,7 @@ class PlusWorkingDaysTest extends TestCase
         $action->setWorkingDays(['28-04']);
         $result = $dt->setAction($action)->executeAction(1)->format('d-m-Y');
         $this->assertEquals('02-05-2018', $result);
+        $this->assertEquals(4, $action->getDaysPlus());
 
 
     }
