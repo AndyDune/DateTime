@@ -112,6 +112,15 @@ class DateTime
         return $this;
     }
 
+    /**
+     * Return origin value.
+     *
+     * @return \DateTime
+     */
+    public function getValue() : \DateTime
+    {
+        return $this->value;
+    }
 
     /**
      * @return DateTimeZone
