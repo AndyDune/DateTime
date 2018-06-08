@@ -75,7 +75,7 @@ class DateTime
      * @param AbstractAction $action
      * @return $this
      */
-    public function setAction(AbstractAction $action)
+    public function setAction(AbstractAction $action) : DateTime
     {
         $this->action = $action;
         $this->action->setDateTime($this);
@@ -103,7 +103,7 @@ class DateTime
      * @param DateTimeZone|string $zone
      * @return $this
      */
-    public function setDateTimeZone($zone)
+    public function setDateTimeZone($zone) : DateTime
     {
         if (is_string($zone)) {
             $zone = new DateTimeZone($zone);
@@ -125,7 +125,7 @@ class DateTime
     /**
      * @return DateTimeZone
      */
-    public function getTimezone()
+    public function getTimezone() : DateTimeZone
     {
         return $this->value->getTimezone();
     }
@@ -152,7 +152,7 @@ class DateTime
      *
      * @return DateTime
      */
-    public function add($interval)
+    public function add($interval) : DateTime
     {
         if ($interval instanceof DateInterval) {
             $this->value->add($interval);
@@ -238,14 +238,23 @@ class DateTime
         return date($format, $time);
     }
 
-    public function isSunday()
+    /**
+     * Is it sunday?
+     *
+     * @return bool
+     */
+    public function isSunday() : bool
     {
-        return ($this->format('N') == 7);
+        return (bool)($this->format('N') == 7);
     }
 
-    public function isSaturday()
+    /**
+     * Is it saturday
+     * @return bool
+     */
+    public function isSaturday() : bool
     {
-        return ($this->format('N') == 6);
+        return (bool)($this->format('N') == 6);
     }
 
     /**
