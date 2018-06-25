@@ -16,7 +16,7 @@ Installation using composer:
 ```
 composer require andydune/datetime
 ```
-Or if composer didn't install globally:
+Or if composer was not installed globally:
 ```
 php composer.phar require andydune/datetime
 ```

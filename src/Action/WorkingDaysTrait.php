@@ -21,6 +21,25 @@ trait WorkingDaysTrait
     protected $workingDays = [];
     protected $formatWorkingDays = 'j-m';
 
+    protected $workingWeekDays = [1, 2, 3, 4, 5, 6, 7];
+
+    /**
+     * Set special working week.
+     * Array is week day numbers.
+     * 1 - monday
+     * 2 - tuesday
+     * ...
+     * 7 - sunday
+     *
+     * @param array $workingWeekDays
+     * @return $this
+     */
+    public function setWorkingWeekDays(array $workingWeekDays)
+    {
+        $this->workingWeekDays = $workingWeekDays;
+        return $this;
+    }
+
     /**
      * Set official no working days for your country.
      *
@@ -60,6 +79,15 @@ trait WorkingDaysTrait
     {
         $dayMonth = $this->getDateTime()->format($this->formatNoWorkingDays);
         if (in_array($dayMonth, $this->noWorkingDays)) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function isInWorkingWeekDays()
+    {
+        $day = $this->getDateTime()->format('N');
+        if (in_array($day, $this->workingWeekDays)) {
             return true;
         }
         return false;

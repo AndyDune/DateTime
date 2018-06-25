@@ -14,6 +14,8 @@
 namespace AndyDune\DateTime\Action;
 
 
+use AndyDune\DateTime\DateTime;
+
 class PlusWorkingDays extends AbstractAction
 {
     use WorkingDaysTrait;
@@ -23,6 +25,7 @@ class PlusWorkingDays extends AbstractAction
     protected $addWorkingDayIfPublicHolidayInCommonHoliday = false;
 
     protected $daysPlus = 0;
+    protected $daysPlusNotWorkingWeekDay = 0;
 
     public function setIsAddWorkingDayIfPublicHolidayInCommonHoliday($flag = true)
     {
@@ -30,16 +33,27 @@ class PlusWorkingDays extends AbstractAction
         return $this;
     }
 
-    public function execute(...$params)
+    public function execute(...$params) : DateTime
     {
         $plusDays = $params[0] ?? 0;
         $doNotFindHolidayInSunday = 5;
         $this->daysPlus = 0;
+        $this->daysPlusNotWorkingWeekDay = 0;
         do {
             $go = $plusDays;
             $inNoWorkingDays = $this->isInNoWorkingDays();
+            $isInWorkingWeekDays = $this->isInWorkingWeekDays();
             if ($this->isInWorkingDays()) {
+
                 if (!$plusDays) {
+                    if (!$isInWorkingWeekDays) {
+                        $this->getDateTime()->add('+ 1 day');
+                        $this->daysPlus++;
+                        $this->daysPlusNotWorkingWeekDay++;
+                        $go = 1;
+                        continue;
+                    }
+
                     return $this->getDateTime();
                 }
                 $this->getDateTime()->add('+ 1 day');
@@ -69,6 +83,13 @@ class PlusWorkingDays extends AbstractAction
             }
 
             if (!$plusDays) {
+                if (!$isInWorkingWeekDays) {
+                    $this->getDateTime()->add('+ 1 day');
+                    $this->daysPlus++;
+                    $this->daysPlusNotWorkingWeekDay++;
+                    $go = 1;
+                    continue;
+                }
                 return $this->getDateTime();
             }
 
@@ -76,6 +97,12 @@ class PlusWorkingDays extends AbstractAction
             $this->getDateTime()->add('+ 1 day');
             $this->daysPlus++;
             $go = $plusDays--;
+            if (!$go and !$isInWorkingWeekDays) {
+                $this->getDateTime()->add('+ 1 day');
+                $this->daysPlus++;
+                $this->daysPlusNotWorkingWeekDay++;
+                continue;
+            }
         } while ($go);
         return $this->getDateTime();
     }
@@ -85,9 +112,21 @@ class PlusWorkingDays extends AbstractAction
      *
      * @return int
      */
-    public function getDaysPlus()
+    public function getDaysPlus() : int
     {
         return $this->daysPlus;
     }
+
+    /**
+     * It returns days count working days witch are not working within special working week.
+     * Use method setWorkingWeekDays() to point working weekdays
+     *
+     * @return int
+     */
+    public function getDaysPlusWorkingWeekDay(): int
+    {
+        return $this->daysPlusNotWorkingWeekDay;
+    }
+
 
 }
