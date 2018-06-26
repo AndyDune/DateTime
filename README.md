@@ -186,7 +186,22 @@ $dt->setAction(new IsWorkingDay())->executeAction(); // true
 
 $dt = new DateTime('22-04-2018', 'd-m-Y');
 $dt->setAction(new IsWorkingDay())->executeAction(); // false
-
 ```
 
+### To know closest working date after pointed days number
 
+There is action `AndyDune\DateTime\Action\PlusWorkingDays` for this task.
+
+```php
+use AndyDune\DateTime\Action\PlusWorkingDays;
+use AndyDune\DateTime\DateTime;
+
+$dt = new DateTime('28-04-2018', 'd-m-Y');
+$action = new PlusWorkingDays();
+$action->setNoWorkingDays(['1-05', '30-04']);  // set list of official holidays 
+$action->setWorkingDays(['28-04']); // set list of working sundays or saturdays
+$dt->setAction($action)->executeAction(1); // to know working date after 1 day
+
+$dt->format('d-m-Y'); // '02-05-2018'
+$action->getDaysPlus(); // 4 days
+```
