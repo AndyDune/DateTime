@@ -25,6 +25,7 @@ class PlusWorkingDays extends AbstractAction
     protected $addWorkingDayIfPublicHolidayInCommonHoliday = false;
 
     protected $daysPlus = 0;
+    protected $daysPlusWorkingWeekDay = 0;
     protected $daysPlusNotWorkingWeekDay = 0;
 
     public function setIsAddWorkingDayIfPublicHolidayInCommonHoliday($flag = true)
@@ -39,28 +40,32 @@ class PlusWorkingDays extends AbstractAction
         $doNotFindHolidayInSunday = 5;
         $this->daysPlus = 0;
         $this->daysPlusNotWorkingWeekDay = 0;
+        $this->daysPlusWorkingWeekDay = 0;
         do {
+            if ($plusDays < 0) {
+                $plusDays = 0;
+            }
             $go = $plusDays;
             $inNoWorkingDays = $this->isInNoWorkingDays();
             $isInWorkingWeekDays = $this->isInWorkingWeekDays();
             if ($this->isInWorkingDays()) {
-
                 if (!$plusDays) {
                     if (!$isInWorkingWeekDays) {
                         $this->getDateTime()->add('+ 1 day');
                         $this->daysPlus++;
+                        $this->daysPlusWorkingWeekDay++;
                         $this->daysPlusNotWorkingWeekDay++;
-                        $go = 1;
-                        continue;
+                        $go = true; continue;
                     }
-
                     return $this->getDateTime();
                 }
                 $this->getDateTime()->add('+ 1 day');
+                $this->daysPlusWorkingWeekDay++;
                 $this->daysPlus++;
                 $plusDays--;
-                continue;
+                $go = true; continue;
             }
+
             if ($this->getDateTime()->isSaturday()
                 or $this->getDateTime()->isSunday()
             ) {
@@ -71,38 +76,42 @@ class PlusWorkingDays extends AbstractAction
                 }
                 $this->getDateTime()->add('+ 1 day');
                 $this->daysPlus++;
-                $go = true;
-                continue;
+                $go = true; continue;
             }
 
             if ($inNoWorkingDays) {
                 $this->getDateTime()->add('+ 1 day');
                 $this->daysPlus++;
-                $go = true;
-                continue;
+                $go = true; continue;
             }
 
             if (!$plusDays) {
                 if (!$isInWorkingWeekDays) {
                     $this->getDateTime()->add('+ 1 day');
                     $this->daysPlus++;
+                    $this->daysPlusWorkingWeekDay++;
                     $this->daysPlusNotWorkingWeekDay++;
-                    $go = 1;
-                    continue;
+                    $go = true; continue;
                 }
+
                 return $this->getDateTime();
             }
 
             $doNotFindHolidayInSunday++;
-            $this->getDateTime()->add('+ 1 day');
+            $this->getDateTime()->add('+ 1 days');
             $this->daysPlus++;
-            $go = $plusDays--;
+            $this->daysPlusWorkingWeekDay++; // считаем пропущенные рабочие дни
+            $plusDays--;
+            $go = true; continue;
+
+            // Это уже повтор кода что выше
             if (!$go and !$isInWorkingWeekDays) {
                 $this->getDateTime()->add('+ 1 day');
                 $this->daysPlus++;
                 $this->daysPlusNotWorkingWeekDay++;
                 continue;
             }
+
         } while ($go);
         return $this->getDateTime();
     }
@@ -123,10 +132,19 @@ class PlusWorkingDays extends AbstractAction
      *
      * @return int
      */
-    public function getDaysPlusWorkingWeekDay(): int
+    public function getDaysPlusNotWorkingWeekDay()
     {
         return $this->daysPlusNotWorkingWeekDay;
     }
 
 
+    /**
+     * It returns days count working days .
+     *
+     * @return int
+     */
+    public function getDaysPlusWorkingWeekDay()
+    {
+        return $this->daysPlusWorkingWeekDay;
+    }
 }

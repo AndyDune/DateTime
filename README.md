@@ -190,7 +190,7 @@ $dt->setAction(new IsWorkingDay())->executeAction(); // false
 
 ### To know closest working date after pointed days number
 
-There is action `AndyDune\DateTime\Action\PlusWorkingDays` for this task.
+There is an action `AndyDune\DateTime\Action\PlusWorkingDays` for this task.
 
 ```php
 use AndyDune\DateTime\Action\PlusWorkingDays;
