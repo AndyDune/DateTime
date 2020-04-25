@@ -65,7 +65,7 @@ $dt = new DateTime(new \DateTime());
 Format datetime
 ------------
 
-It has method `format()` to get formated datetiem data as string. Method waits string as for date() function.
+It has method `format()` to get formated datetiem data as string. Method waits string like date() function.
 ```php
 use AndyDuneTest\DateTime\DateTime;
 $dt = new DateTime();
