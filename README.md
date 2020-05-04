@@ -99,7 +99,6 @@ $dt->add('T2S'); // two seconds
 $dt->add('6YT5M'); // six years and five minutes
 ``` 
 
-
 The unit types must be entered from the largest scale unit on the left to the smallest scale unit on the right.
 Use first "-" char for negative periods. OR Relative period.
 
