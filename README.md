@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/andydune/datetime.svg?style=flat-square)](https://packagist.org/packages/andydune/datetime)
 
 
-Extends DateTime class for add some comfort.
+It extends DateTime class to add some comfort.
 
 Installation
 ------------
